@@ -1,0 +1,9 @@
+---
+title: "About"
+---
+
+This is a portfolio of GIS based work I have created in RStudio, using techniques I have learned at university, and techniques I have taught myself. I am a BA Geography with Social Data Science student at University College London with an interest in GIS and mapping data. This portfolio shows many pieces of work I have produced in RStudio, from geographic reports on crime, to explaining fundamental concepts in mapping with examples. 
+
+If there are any questions or comments regarding the pages uploaded, please email me at vmistri91@gmail.com.
+
+Additionally, if you would like me to produce some maps using geographic data, please contact me at vmistri91@gmail.com for enquiries.
