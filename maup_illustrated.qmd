@@ -1,0 +1,759 @@
+---
+title: "The Multiple Aerial Unit Problem Illustrated"
+---
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+#Set working directory
+setwd('C:/Users/vmist/Documents/Vishal/Vishal/PortfolioLocal')
+```
+
+## Introduction
+
+The **Multiple Aerial Unit Problem**, also known as the **MAUP**, is a **major issue** faced in geospatial analysis. The MAUP can directly impact the results of spatial analysis tasks, due to two factors: **the scale of analysis, and the zoning of geographic regions.** *This report aims to illustrate how the MAUP can affect the results of spatial analysis, by mapping different scales and zones of data on the same variable* (Ethnicity: Proportion of Asian Indians living in each data zone). The report will additionally show how further analysis beyond producing simple maps, such as spatial autocorrelation, is **directly impacted** by the MAUP.
+
+If you would like to reference this report please use the following reference:
+
+Mistri V. (2024) 'The Multiple Aerial Unit Problem Illustrated', *Vishal Mistri GIS Portfolio,* <https://vmistri91.github.io/Portfolio/maup_illustrated.html>.
+
+## Understanding the MAUP
+
+The MAUP arises when the **results of geospatial analysis change depending on the spatial units used**, such as Lower Super Output Areas (LSOAs) or Electoral Wards. As stated above, the MAUP is characterised by two effects: **the scale effect and the zoning effect.**
+
+**The scale effect** **occurs when different results in the outcome occur as data has been aggregated at different levels of spatial resolution**, for example, analysing data at the LSOA level versus the Ward level. When spatial units are **larger**, there can be a **loss of detail** and an increase in correlation between variables, potentially leading to inaccurate conclusions. Using the levels stated above, Wards are much larger than LSOAs, and may **mask localised trends** in the data being analysed. An example of the scale effect is shown below, showing that **larger spatial units smooth variation and trends** in the data (Source: <https://gisgeography.com/maup-modifiable-areal-unit-problem/>).
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics('maup scale.png')
+```
+
+**The zoning effect occurs when the boundaries of geospatial units are changed while retaining the same number of units**. This may lead to inconsistencies in results, as the different ways of grouping data can significantly affect outcomes. A common example of this is the different ways of creating voting district boundaries, which can lead to different conclusions about voting patterns, known as **'gerrymandering'.** An example of the zoning effect is shown below, where **different divisions of the same data can create different zones which have a 'blue' or 'red' majority** (Source: Bernard, 2019).
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics('maup zoning.png')
+```
+
+Throughout this report, the scale effect is a more significant concern, as **UK census data is aggregated** at many different spatial scales, compared to a smaller degree of zoning changes in London.
+
+The MAUP is **extremely important** in *geographical, sociological, political and economic analysis* as it can lead to **ecological fallacies** where incorrect assumptions and trends are interpreted about individuals using aggregated data. **Understanding and mitigating the effects** of the MAUP is an **essential** part of geospatial data analysis leading to accurate policy-making.
+
+## Data Sources
+
+All spatial boundaries have been downloaded from the ONS Open Geography Portal <https://geoportal.statistics.gov.uk/>. Boundaries used include: 2021 Output Areas (OAs), 2021 Lower Super Output Areas (LSOAs), 2021 Middle Super Output Areas (MSOAs) and 2021 Electoral Wards.
+
+To obtain the 2021 census data on ethnicity across all spatial levels, the Nomis website can be used <https://www.nomisweb.co.uk/>.
+
+All of the files used in this report can be found in this Google Drive folder <https://drive.google.com/drive/folders/1NexsgLGkDpfTyOAAL9_08LIlyelk1mbO?usp=sharing>.
+
+## Data Preparation: Overview
+
+**This report will focus on the locations of Asian: Indian ethnic groups across London at different spatial levels**, but there are many different data preparation steps to conduct, as the each different geopackage (*4: OA, LSOA, MSOA, Ward*), needs to be **filtered** to contain data for London, each ethnicity dataset needs to be **merged** correctly to its corresponding geopackage, and **new variables** for the proportion of people with Indian ethnicity need to be created before mapping.
+
+*Feel free to skip these data preparation steps if you would like to go straight to the differences in geospatial analysis due to the scale effect.*
+
+## Data Preparation: Geopackages
+
+First, all the relevant packages for this report need to be **loaded** in.
+
+```{r, warning=FALSE, message=FALSE}
+#Load relevant packages
+library(sf)
+library(tmap)
+library(ggplot2)
+library(RColorBrewer)
+library(spdep)
+library(tidyverse)
+```
+
+Next, all the **geopackages**, which contain geospatial information on the shape and characteristics of each data zone, need to be **loaded** into RStudio. While the OA, LSOA, MSOA files have matching geographic codes to the 2021 census data, the matching geopackage for the ward census data is the 2022 Ward file.
+
+```{r}
+#Load in all the 4 types of boundaries
+OAs <- st_read("2021_OA.gpkg")
+LSOAs <- st_read("2021_LSOA.gpkg")
+MSOAs <- st_read("2021_MSOA.gpkg")
+Wards <- st_read("2022_Ward.gpkg")
+```
+
+As shown in the message, the **`projected coordinate reference system`** (CRS) of these files is `'British National Grid'`, which is good, as this is the standard CRS for the UK.
+
+Now the data zones for **London** need to be **filtered** out of these larger geopackages, which contain data for the whole of England. For those unfamiliar with the shape of London, a map is included below with the shape and names of all the boroughs within Greater London (Source: <https://fity.club/lists/suggestions/boroughs-of-london-map/>).
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics('london boroughs map.jpg')
+```
+
+There are **different ways of conducting this filter** for different types of geopackages, so I will first **start with the OA boundaries**. As not all the OAs in London are listed in consecutive rows of the dataset, directly extracting the rows of interest is not possible. In the column `LSOA21NM`, the name of the London borough associated with the OA is named, so the **best way** to filter this data is to use the `grepl` function which **extracts all rows which contain the name** of each of the 32 London boroughs and the City of London to form a new dataset, as shown below.
+
+```{r, fig.align='center'}
+OA_London <- OAs[grepl('City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster', OAs$LSOA21NM), ]
+#Test shape to see if all OAs have transferred
+tm_shape(OA_London)+
+  tm_fill() +
+  tm_borders
+```
+
+All OAs in Greater London have been selected correctly, but there is a **discrepancy** on this map in the North East. As the `grepl` function is extracting all rows which contain the words listed above, **it has also extracted OAs in a different region just outside of London**. In London, there is a borough called 'Brent', but in Essex there is an area called 'Brentwood', so `grepl` has extracted LSOAs within `Brentwood` as well as `Brent`. To fix this, the `Brentwood` **wards can be removed** from the dataset.
+
+```{r, fig.align='center'}
+#Remove Brentwood
+OA_London <- subset(OA_London, !grepl("Brentwood", LSOA21NM, ignore.case = TRUE))
+#Test to see if shape is correct
+tm_shape(OA_London)+
+  tm_fill() +
+  tm_borders()
+```
+
+Now this map is an **accurate depiction** of all the OAs within Greater London.
+
+The **same process** as above can be conducted to filter out LSOAs within London. The difference will be that there are **less LSOAs**, as **LSOAs are a larger spatial unit than OAs.**
+
+```{r, fig.align='center'}
+#Filter LSOAs using grepl
+LSOA_London <- LSOAs[grepl('City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster', LSOAs$LSOA21NM), ]
+#Remove Brentwood
+LSOA_London <- subset(LSOA_London, !grepl("Brentwood", LSOA21NM, ignore.case = TRUE))
+#Test shape to see if all LSOAs have transferred
+tm_shape(LSOA_London)+
+  tm_fill() +
+  tm_borders()
+```
+
+This map is an **accurate depiction** of all the LSOAs within Greater London.
+
+The **same process** as above can be conducted to filter out MSOAs within London. The difference will be that there are **less MSOAs**, as **MSOAs are a larger spatial unit than LSOAs.**
+
+```{r, fig.align='center'}
+#Filter MSOAs using grepl
+MSOA_London <- MSOAs[grepl('City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster', MSOAs$MSOA21NM), ]
+#Remove Brentwood
+MSOA_London <- subset(MSOA_London, !grepl("Brentwood", MSOA21NM, ignore.case = TRUE))
+#Check Shape
+tm_shape(MSOA_London)+
+  tm_fill() +
+  tm_borders()
+```
+
+This is an **accurate** map of the MSOAs within London, where MSOAs are visibly larger than LSOAs.
+
+For the Ward data the same `grepl` method can be used. The difference will be that there are **less Wards**, as **Wards are typically larger than MSOAs.**
+
+```{r, fig.align='center'}
+#Filter Wards using grepl
+Ward_London <- Wards[grepl('City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster', Wards$LAD22NM), ]
+#Remove Brentwood
+Ward_London <- subset(Ward_London, !grepl("Brentwood", LAD22NM, ignore.case = TRUE))
+#Check Shape
+tm_shape(Ward_London)+
+  tm_fill() +
+  tm_borders()
+```
+
+This is an **accurate** representation of all the Wards in Greater London.
+
+In the maps produced, it is a good idea to **provide outlines of all the boroughs in London**, to make it easier to identify zones of interest. Below is an **overview** of how to do this, from **extracting** rows of data which contain London Boroughs, to **producing a quick map.**
+
+```{r, fig.align='center'}
+#Load .gpkg containing information on Local Authorities
+LAs_2021 <- st_read('Local_Authority_Districts_December_2021_GB_BGC.gpkg')
+#Extract rows which contain information on London boroughs
+rows_to_extract <- 277:309
+London_Boroughs <- LAs_2021[rows_to_extract, ]
+#Create a basic map of boroughs
+tm_shape(London_Boroughs)+
+  tm_fill() +
+  tm_borders()
+```
+
+## Data Preparation: Ethnicity Data
+
+Now that the geopackages have been prepared for the analysis, by selecting data zones which only lie within Greater London, the **ethnicity data can be loaded and prepared** in R for the analysis. All the ethnicity census files are in the `.csv` file format which can be read by R easily.
+
+```{r}
+#Load in all the ethnicity datasets at each geographic level
+Ethnicity_OA <- read.csv("ts021/census2021-ts021-oa.csv")
+Ethnicity_LSOA <- read.csv("ts021/census2021-ts021-lsoa.csv")
+Ethnicity_MSOA <- read.csv("ts021/census2021-ts021-msoa.csv")
+Ethnicity_Ward <- read.csv("ts021/census2021-ts021-ward.csv")
+```
+
+Upon inspection of these datasets, the **names of the columns are all very long**, so the columns relevant to this report should be **shortened**, to make it easier to write code.
+
+```{r}
+#Rename the Indian ethnicity and total population columns to make them shorter for each data frame
+Ethnicity_OA$Indian <- Ethnicity_OA$Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian
+Ethnicity_LSOA$Indian <- Ethnicity_LSOA$Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian
+Ethnicity_MSOA$Indian <- Ethnicity_MSOA$Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian
+Ethnicity_Ward$Indian <- Ethnicity_Ward$Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian
+Ethnicity_OA$Total <- Ethnicity_OA$Ethnic.group..Total..All.usual.residents
+Ethnicity_LSOA$Total <- Ethnicity_LSOA$Ethnic.group..Total..All.usual.residents
+Ethnicity_MSOA$Total <- Ethnicity_MSOA$Ethnic.group..Total..All.usual.residents
+Ethnicity_Ward$Total <- Ethnicity_Ward$Ethnic.group..Total..All.usual.residents
+```
+
+Now these data frames can be **merged** to their respective spatial dataframes. A **left join** is conducted here, indicated by `'all.x=T'`, as this allows **all of the geographic regions from the spatial objects** (such as `OA_London`) **to be preserved**. This means that if there is missing data for ethnicity for a particular data zone, the data zone will still be mapped and not removed from the data.
+
+```{r}
+#Merge geographic data with ethnicity data
+OA_Ethnicity_London<- merge(OA_London, Ethnicity_OA, by.x="OA21CD", by.y="geography.code", all.x=T)
+LSOA_Ethnicity_London<- merge(LSOA_London, Ethnicity_LSOA, by.x="LSOA21CD", by.y="geography.code", all.x=T)
+MSOA_Ethnicity_London<- merge(MSOA_London, Ethnicity_MSOA, by.x="MSOA21CD", by.y="geography.code", all.x=T)
+Ward_Ethnicity_London<- merge(Ward_London, Ethnicity_Ward, by.x="WD22CD", by.y="geography.code", all.x=T)
+```
+
+Now the data should be **checked** **for** **NA** values.
+
+```{r}
+#Check for NAs in relevant columns
+sum(is.na(OA_Ethnicity_London$Indian))
+sum(is.na(LSOA_Ethnicity_London$Indian))
+sum(is.na(MSOA_Ethnicity_London$Indian))
+sum(is.na(Ward_Ethnicity_London$Indian))
+sum(is.na(OA_Ethnicity_London$Total))
+sum(is.na(LSOA_Ethnicity_London$Total))
+sum(is.na(MSOA_Ethnicity_London$Total))
+sum(is.na(Ward_Ethnicity_London$Total))
+```
+
+There appears to be an **issue with NAs in the `Ward_Ethnicity_London` data frame**. In the `Ethnicity_Ward` data frame, there is **no information on ethnicity in the City of London.** To solve this issue, all wards in the City of London will be **removed** from `Ward_Ethnicity_London`, and this should not cause many issues as the City of London is very small and their wards are much smaller than a standard sized ward.
+
+```{r}
+#Remove City of London rows
+Ward_Ethnicity_London <- Ward_Ethnicity_London %>%
+  slice(-(1:25))
+#Check for NAs
+sum(is.na(Ward_Ethnicity_London$Indian))
+sum(is.na(Ward_Ethnicity_London$Total))
+
+```
+
+All is fixed now.
+
+Before creating maps, it is a good idea to **work out the proportion of Indians** in every data zone, **instead** **of** mapping the **absolute count**, as this would be **misleading**, and this **ensures consistency across all of the maps.**
+
+```{r}
+#Create % of Indians in data zone variable
+OA_Ethnicity_London$Indianperc <- (OA_Ethnicity_London$Indian/OA_Ethnicity_London$Total)*100
+LSOA_Ethnicity_London$Indianperc <- (LSOA_Ethnicity_London$Indian/LSOA_Ethnicity_London$Total)*100
+MSOA_Ethnicity_London$Indianperc <- (MSOA_Ethnicity_London$Indian/MSOA_Ethnicity_London$Total)*100
+Ward_Ethnicity_London$Indianperc <- (Ward_Ethnicity_London$Indian/Ward_Ethnicity_London$Total)*100
+```
+
+## Comparing Choropleth Maps
+
+Now it is time to see what the different maps look like, and **identify the differences between each map** due to the different scales used in the aggregation of the ethnicity data. If you would like to know how to make a presentable map in RStudio, please view my page on "Map Presentation and Styles in RStudio using tmap" <https://vmistri91.github.io/Portfolio/map_presentation.html>.
+
+After quickly inspecting the data, the **highest percentage in a particular data zone is near 85%**, so I will be creating **8 data classes equally spaced out in 11 unit increments, for every map** to ensure consistency. I will also be using the same colour palette in all maps to help visualise the differences in using different geographic levels.
+
+```{r}
+#Set class break intervals
+breaks <- c(0,11,22,33,44,55,66,77,88)
+```
+
+The first map produced will show **Asian:Indian ethnicity across all OAs** in London
+
+```{r, fig.align='center'}
+#Create OA map
+tm_shape(OA_Ethnicity_London) +
+  tm_fill(col = "Indianperc",
+          style = "fixed",
+          palette = 'YlOrRd',
+          n=8,
+          breaks=breaks,
+          title = "% of Asian:Indian people") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2,
+             col = 'black',
+             alpha = 1) +
+  tm_layout(main.title = "% of Asian:Indian persons by OA in London (2021)",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +  
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+This is a **very detailed map** which shows that the **highest percentages** of Asian:Indians are located in **North-West and West London,** mainly in the boroughs of Harrow, Brent, Ealing and Hounslow. There are also other higher percentages located in the Newham/Redbridge areas. The *highest percentages are found in Kenton/Kingsbury (Harrow/Brent), Wembley/Alperton/Sudbury (Brent) and Southall (Ealing/Hounslow).* As the map is of a high resolution, showing small areas, certain output areas reach up to 88% Asian:Indian ethnicity, and can be identified on the map.
+
+Now lets look at the same data, but at the **LSOA resolution.**
+
+```{r, fig.align='center'}
+#Create LSOA map
+tm_shape(LSOA_Ethnicity_London) +
+  tm_fill(col = "Indianperc",
+          style = "fixed",
+          palette = 'YlOrRd',
+          n=8,
+          breaks=breaks,
+          title = "% of Asian:Indian people") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2,
+             col = 'black',
+             alpha = 1) +
+  tm_layout(main.title = "% of Asian:Indian persons by LSOA in London (2021)",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +  
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+The first major difference between this map and the OA map is that there are **less regions with higher percentages (coloured towards dark red)** visible on the map, **due to the aggregation of many smaller OAs in a region to form an LSOA.** While the 3 key areas identified above are clearly visible still, they are **one to two shades lighter in colou**r, as are many of their surrounding areas. *The highest percentage value for an LSOA is now 70.2% down from the mid 80% in the OA map.* This is due to the aggregation of spatial units from MAUP's scale effect.
+
+Now lets look at the same data, but at the **MSOA level.**
+
+```{r, fig.align='center'}
+#Create MSOA map
+tm_shape(MSOA_Ethnicity_London) +
+  tm_fill(col = "Indianperc",
+          style = "fixed",
+          palette = 'YlOrRd',
+          n=8,
+          breaks=breaks,
+          title = "% of Asian:Indian people") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2,
+             col = 'black',
+             alpha = 1) +
+  tm_layout(main.title = "% of Asian:Indian persons by MSOA in London (2021)",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +  
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+As the spatial units get larger, it is clear that **the trends are smoothed out and averaged due to the scale effect**. *Now the highest percentage is now only 52.7% down from the 70-80% range above.* It has also now become **more difficult to identify the areas with the highest percentages of Asian:Indians, as the colour gradient has become less divergent,** meaning trends are harder to spot. Areas on thee east side of London are hardly noticeable to have a higher percentage of Asian:Indians, even though in the OA map, certain OAs in Redbridge and Newham are in the 44-66% range.
+
+Now lets look at the same data at the **Ward level.**
+
+```{r, fig.align='center'}
+#Create Ward map
+tm_shape(Ward_Ethnicity_London) +
+  tm_fill(col = "Indianperc",
+          style = "fixed",
+          palette = 'YlOrRd',
+          n=8,
+          breaks=breaks,
+          title = "% of Asian:Indian people") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2,
+             col = 'black',
+             alpha = 1) +
+  tm_layout(main.title = "% of Asian:Indian persons by Ward in London (2021)",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +  
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+With **Wards being only slightly larger than MSOAs** in some cases, the **trends are very similar**, where most percentages have been smoothed to create lower percentage values over larger areas. What is of interest here is that **due to the zoning effect, certain wards have higher percentages over the previous map**, due to the slightly different borders of the boundary in the same area. This is evident in Wembley Central, Southall Green, Southall West and Kenton West, which have higher percentages in this map compared to comparably sized areas in the MSOA map.
+
+After viewing all of these maps with different scales, it should be **clear that the MAUP is a significant issue in GIS studies**, with the scale effect, and zoning effect (to an extent), creating many different trends visible across the different maps. **Maps with smaller zones, such as OAs, provide more detail of the trends, and maps with larger zones, such as Wards/MSOAs, smooth variation of the trends**, due to the way the data has been **aggregated** at a larger geographic level.
+
+However, it is important to understand just how significant the MAUP is in geospatial analysis by viewing how the different spatial resolutions above **impact a spatial autocorrelation calculation**, which is a commonly used query in GIS to **identify clusters of a variable across an area.**
+
+## Spatial Autocorrelation: Method
+
+One useful technique is **spatial autocorrelation**, which *measures the degree to which similar values (of Asian:Indian ethnicity) occur near each other in a study region, in a positive or negative manner*. This concept links to **Tobler's Fist Law of Geography** which is "Everything is related to everything else, but near things are more related than distant things", a foundational concept in GIS. Since this concept looks at neighbour relations between data zones, it will be **impacted by the scale effect of the MAUP**, which will be illustrated in this section. The **scale effect** has a significant impact on spatial autocorrelation as *when data is aggregated into larger spatial units, internal variability among the data decreases, which leads to smoother data.* This could lead to higher spatial autocorrelation results when unit areas are larger and lower correlations when units are smaller, even though the data is the same, but just altered by scale.
+
+For a **complete overview of how spatial autocorrelation works**, the methods behind calculations, and definitions of key terms, **I recommend reading my GIS study of weapon possession crimes in West Midlands County (2023), specifically the spatial autocorrelation section here:** <https://vmistri91.github.io/Portfolio/social_atlas_weapons.html>.
+
+The first step of spatial autocorrelation is to **define the neighbour relationship** between the data zones in each set of data. For this report **Queen's Case contiguity** **will be used**, *which defines a data zone's neighbours as zones which are adjacent with a common border to the main zone.* Queen's case is used instead of Rook's case, as this only forms partial neighbour relations, which is **inappropriate** for this study. Fixed distance definition is not used as specifying a radius from each data zone may be **unreliable**, due to the nature of ethnicity data patterns, and the different scales of geographic regions being studied. The image below provides an illustration of how Queen's Case contiguity works (Source: Oliveria et al., 2021).
+
+```{r, echo=FALSE, fig.align='center'}
+knitr::include_graphics('contiguity.png')
+```
+
+The **Queen's case contiguity** needs to be **set** for all of the different datasets below.
+
+```{r}
+#Set Queen neighbours for all datasets
+OA_neighbours_queen <- OA_Ethnicity_London |>
+    poly2nb(queen = T)
+LSOA_neighbours_queen <- LSOA_Ethnicity_London |>
+    poly2nb(queen = T)
+MSOA_neighbours_queen <- MSOA_Ethnicity_London |>
+    poly2nb(queen = T)
+Ward_neighbours_queen <- Ward_Ethnicity_London |>
+    poly2nb(queen = T)
+```
+
+Now a **list of all the neighbour relations needs to be created** in order to conduct the autocorrelation test.
+
+```{r}
+#Create neighbours list
+OA_spatial_weights_queen <- OA_neighbours_queen |>
+  nb2listw(style = "W")
+LSOA_spatial_weights_queen <- LSOA_neighbours_queen |>
+  nb2listw(style = "W")
+MSOA_spatial_weights_queen <- MSOA_neighbours_queen |>
+  nb2listw(style = "W")
+Ward_spatial_weights_queen <- Ward_neighbours_queen |>
+  nb2listw(style = "W")
+```
+
+**Local** spatial autocorrelation measures identify the **degree of clustering or dispersion** of the data **in each data zone across the entire study area**. **Moran’s I**, which quantifies the degree of autocorrelation, providing correlation coefficients between an area and its neighbours, is used. *A score is provided between 1 and -1, with 1 indicating perfect clustering, and -1 indicating perfect dispersion.*
+
+We first need to **calculate local Moran's I coefficients** for the OA dataset. The result has complicated headings, so these can be **simplified** for ease. Once this is done, the values can be **binded** to the original `OA_Ethnicity_London` data frame.
+
+```{r}
+#Conduct Local Moran's I for OA
+OA_local_moran_queen <- OA_Ethnicity_London |>
+  pull(Indianperc) |>
+  as.vector() |>
+  localmoran(OA_spatial_weights_queen)
+
+#Inspect result
+head(OA_local_moran_queen)
+
+#Update heading names
+OA_local_moran_queen <- as.data.frame(OA_local_moran_queen)
+names(OA_local_moran_queen) <- c("LMI_Ii", "LMI_eIi", "LMI_varIi", "LMI_zIi", "LMI_sigP")
+
+#Join the data frames together
+OA_Ethnicity_London <- OA_Ethnicity_London |>
+  mutate(OA_local_moran_queen)
+```
+
+The above steps can be **repeated** for the other different data zones as shown below.
+
+```{r}
+##### For LSOA #####
+#Conduct Local Moran's I for OA
+LSOA_local_moran_queen <- LSOA_Ethnicity_London |>
+  pull(Indianperc) |>
+  as.vector() |>
+  localmoran(LSOA_spatial_weights_queen)
+
+#Inspect result
+head(LSOA_local_moran_queen)
+
+#Update heading names
+LSOA_local_moran_queen <- as.data.frame(LSOA_local_moran_queen)
+names(LSOA_local_moran_queen) <- c("LMI_Ii", "LMI_eIi", "LMI_varIi", "LMI_zIi", "LMI_sigP")
+
+#Join the data frames together
+LSOA_Ethnicity_London <- LSOA_Ethnicity_London |>
+  mutate(LSOA_local_moran_queen)
+
+##### For MSOA #####
+#Conduct Local Moran's I for OA
+MSOA_local_moran_queen <- MSOA_Ethnicity_London |>
+  pull(Indianperc) |>
+  as.vector() |>
+  localmoran(MSOA_spatial_weights_queen)
+
+#Inspect result
+head(MSOA_local_moran_queen)
+
+#Update heading names
+MSOA_local_moran_queen <- as.data.frame(MSOA_local_moran_queen)
+names(MSOA_local_moran_queen) <- c("LMI_Ii", "LMI_eIi", "LMI_varIi", "LMI_zIi", "LMI_sigP")
+
+#Join the data frames together
+MSOA_Ethnicity_London <- MSOA_Ethnicity_London |>
+  mutate(MSOA_local_moran_queen)
+
+##### For Ward #####
+#Conduct Local Moran's I for OA
+Ward_local_moran_queen <- Ward_Ethnicity_London |>
+  pull(Indianperc) |>
+  as.vector() |>
+  localmoran(Ward_spatial_weights_queen)
+
+#Inspect result
+head(Ward_local_moran_queen)
+
+#Update heading names
+Ward_local_moran_queen <- as.data.frame(Ward_local_moran_queen)
+names(Ward_local_moran_queen) <- c("LMI_Ii", "LMI_eIi", "LMI_varIi", "LMI_zIi", "LMI_sigP")
+
+#Join the data frames together
+Ward_Ethnicity_London <- Ward_Ethnicity_London |>
+  mutate(Ward_local_moran_queen)
+```
+
+Using both Moran's I values and statistical significance for each data zone, a **Local Indicators of Spatial Autocorrelation (LISA)** map can be created, as outlined by Anselin (1995) here <https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x>. The map creates 4 quadrants, which identify different types of spatial autocorrelation. **Low-low** identifies areas with low values surrounded by low values of crime and **high-high** identifies areas with high values surrounded by high values of crime. **High-low** identifies areas with a high value surrounded by areas with low values, and **Low-high** identifies areas with a low value surrounded by areas with high values, essentially identifying hexagons which are outliers.
+
+To create this map, significance breaks and a significance level need to be set. In this study, the **significance level is set to 0.05.**
+
+```{r}
+#Set Significance breaks for each dataset
+OA_Ethnicity_London <- OA_Ethnicity_London |>
+  mutate(obs_diff = (Indianperc - mean(OA_Ethnicity_London$Indianperc)))
+LSOA_Ethnicity_London <- LSOA_Ethnicity_London |>
+  mutate(obs_diff = (Indianperc - mean(LSOA_Ethnicity_London$Indianperc)))
+MSOA_Ethnicity_London <- MSOA_Ethnicity_London |>
+  mutate(obs_diff = (Indianperc - mean(MSOA_Ethnicity_London$Indianperc)))
+Ward_Ethnicity_London <- Ward_Ethnicity_London |>
+  mutate(obs_diff = (Indianperc - mean(Ward_Ethnicity_London$Indianperc)))
+
+#Compare local Local Moran's I value with mean value for each dataset
+OA_Ethnicity_London <- OA_Ethnicity_London |>
+  mutate(LMI_diff = (OA_Ethnicity_London$LMI_Ii - mean(OA_Ethnicity_London$LMI_Ii)))
+LSOA_Ethnicity_London <- LSOA_Ethnicity_London |>
+  mutate(LMI_diff = (LSOA_Ethnicity_London$LMI_Ii - mean(LSOA_Ethnicity_London$LMI_Ii)))
+MSOA_Ethnicity_London <- MSOA_Ethnicity_London |>
+  mutate(LMI_diff = (MSOA_Ethnicity_London$LMI_Ii - mean(MSOA_Ethnicity_London$LMI_Ii)))
+Ward_Ethnicity_London <- Ward_Ethnicity_London |>
+  mutate(LMI_diff = (Ward_Ethnicity_London$LMI_Ii - mean(Ward_Ethnicity_London$LMI_Ii)))
+
+#Set significance threshold
+signif <- 0.05
+```
+
+The **four different types of clusters can then be identified** for each dataset, and colour palette can be selected for each of the maps which will be produced for each set of data.
+
+```{r}
+#Set the four types of clusters that can be present for each set of data
+OA_Ethnicity_London <- OA_Ethnicity_London |>
+  mutate(cluster_type = case_when(
+    obs_diff > 0 & LMI_diff > 0 & LMI_sigP < signif ~ "High-High",
+    obs_diff < 0 & LMI_diff < 0 & LMI_sigP < signif ~ "Low-Low",
+    obs_diff < 0 & LMI_diff > 0 & LMI_sigP < signif ~ "Low-High",
+    obs_diff > 0 & LMI_diff < 0 & LMI_sigP < signif ~ "High-Low",
+    LMI_sigP > signif ~ "No Significance"))
+LSOA_Ethnicity_London <- LSOA_Ethnicity_London |>
+  mutate(cluster_type = case_when(
+    obs_diff > 0 & LMI_diff > 0 & LMI_sigP < signif ~ "High-High",
+    obs_diff < 0 & LMI_diff < 0 & LMI_sigP < signif ~ "Low-Low",
+    obs_diff < 0 & LMI_diff > 0 & LMI_sigP < signif ~ "Low-High",
+    obs_diff > 0 & LMI_diff < 0 & LMI_sigP < signif ~ "High-Low",
+    LMI_sigP > signif ~ "No Significance"))
+MSOA_Ethnicity_London <- MSOA_Ethnicity_London |>
+  mutate(cluster_type = case_when(
+    obs_diff > 0 & LMI_diff > 0 & LMI_sigP < signif ~ "High-High",
+    obs_diff < 0 & LMI_diff < 0 & LMI_sigP < signif ~ "Low-Low",
+    obs_diff < 0 & LMI_diff > 0 & LMI_sigP < signif ~ "Low-High",
+    obs_diff > 0 & LMI_diff < 0 & LMI_sigP < signif ~ "High-Low",
+    LMI_sigP > signif ~ "No Significance"))
+Ward_Ethnicity_London <- Ward_Ethnicity_London |>
+  mutate(cluster_type = case_when(
+    obs_diff > 0 & LMI_diff > 0 & LMI_sigP < signif ~ "High-High",
+    obs_diff < 0 & LMI_diff < 0 & LMI_sigP < signif ~ "Low-Low",
+    obs_diff < 0 & LMI_diff > 0 & LMI_sigP < signif ~ "Low-High",
+    obs_diff > 0 & LMI_diff < 0 & LMI_sigP < signif ~ "High-Low",
+    LMI_sigP > signif ~ "No Significance"))
+
+#Count cluster types for each dataset
+count(OA_Ethnicity_London, cluster_type)
+count(LSOA_Ethnicity_London, cluster_type)
+count(MSOA_Ethnicity_London, cluster_type)
+count(Ward_Ethnicity_London, cluster_type)
+
+#Create colour palette
+pal <- c("#ff2800", "#ff9480", "#133a7c", "#ffffff")
+
+```
+
+The clusters have been identified and now LISA maps for each set of data zones can be created using the data above. First a **map for OAs will be produced.**
+
+```{r, fig.align='center'}
+#Create OA LISA map
+tm_shape(OA_Ethnicity_London) +
+  tm_fill(col = "cluster_type",
+              palette = pal,
+              title = "Cluster Type") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2, 
+             col = 'black', 
+             alpha = 1) +
+  tm_layout(main.title = "LISA map of Asian:Indian ethnicity in London by OA",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+This LISA map shows that there are **2 large high-high clusters of Asian:Indian people in London**. T*he first being across all of Harrow, North Brent (Wembley) and East Hillingdon; the second being across South Hillingdon, West Ealing (Southall) and Central Hounslow.* There are also significantly large high-high clusters in Redbridge, North Newham (Ilford), Central Havering, and Croydon. This map also identifies **low-low clusters in areas of North London**, *such as Enfield and Haringey, and South London, in Richmond, Bromley, and Wandsworth*. There are some **high-low clusters** identified in some areas on the edges of the main high-high clusters, but nothing notable. The very **detailed nature of this map**, showing many different types of clusters across London is a **result of using smaller OA data zones**, **capturing the intricacies** of smaller neighbourhoods across London.
+
+Now the **LSOA LISA map** can be created.
+
+```{r, fig.align='center'}
+#Create LSOA LISA map
+tm_shape(LSOA_Ethnicity_London) +
+  tm_fill(col = "cluster_type",
+              palette = pal,
+              title = "Cluster Type") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2, 
+             col = 'black', 
+             alpha = 1) +
+  tm_layout(main.title = "LISA map of Asian:Indian ethnicity in London by LSOA",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+While the main high-high cluster areas are still clearly visible on the map, the larger size of LSOAs has meant that **many low-low clusters**, such as those identified above, are **not classed as significant and are not mapped**. This is as a **result of the scale effect**, where data variations across the different OAs have been **smoothed** upon the creation of LSOAs. However, the trends visible in this map are still suitable for analysis, as the clusters removed were small, and the main trends still remain, but when analysing this map, it should be **noted that this is not the most accurate depiction of the clusters.**
+
+Now the **MSOA LISA map** can be created.
+
+```{r, fig.align='center'}
+#Create MSOA LISA map
+tm_shape(MSOA_Ethnicity_London) +
+  tm_fill(col = "cluster_type",
+              palette = pal,
+              title = "Cluster Type") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2, 
+             col = 'black', 
+             alpha = 1) +
+  tm_layout(main.title = "LISA map of Asian:Indian ethnicity in London by MSOA",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+This map has **generalised** the data even more. The first thing to note is that the **Harrow/Brent cluster has now been combined with the Hounslow/Hillingdon/Ealing cluster**, providing a **misleading depiction** that Asian:Indians are clustered in this very large connected region. Additionally the **same merge has occurred in East London** between the two large clusters. Another thing to note is that the **clusters in Croydon have disappeared in this map**, which is **misleading** in the analysis, as there are clusters of Asian:Indians in that region (as shown in previous maps), but the trends have been generalised and smoothed here. **Further to this, all the small low-low clusters in South London have been removed** leaving only two rather uninformative clusters at the edge of Hillingdon, and in Brent (Harlesden).
+
+Finally, a **LISA map for the Ward level data** can be produced.
+
+```{r, fig.align='center'}
+#Create Ward LISA map
+tm_shape(Ward_Ethnicity_London) +
+  tm_fill(col = "cluster_type",
+              palette = pal,
+              title = "Cluster Type") +
+  tm_borders(lwd=0.1, 
+             col = 'black', 
+             alpha = 0.1) +
+  tm_shape(London_Boroughs) +
+  tm_borders(lwd=2, 
+             col = 'black', 
+             alpha = 1) +
+  tm_layout(main.title = "LISA map of Asian:Indian ethnicity in London by Ward",
+            main.title.fontface = 2,
+            legend.outside = TRUE,
+            frame = FALSE,
+            legend.outside.position = "right",
+            legend.title.size = 1,
+            legend.title.fontface = 2) +
+  tm_compass(type = "arrow",
+             position = c("right", "bottom")) +
+  tm_scale_bar(breaks = c(0, 5, 10, 15, 20),
+               position = c("left", "bottom")) +
+  tm_credits('Data source: ONS, NOMIS',
+             fontface = 'italic',
+             align = 'right',
+             size = 0.5)
+```
+
+With similar a *similar number of data zones as the MSOA map*, this ward LISA map is a good indication of how the **zoning effect** of the MAUP can affect calculations. The first thing to note is that **more low-low clusters have reappeared** across many of the boroughs as a result of the re-zoning. Additionally, the high-high clusters in East London have been split by high-low clusters in this map, but overall this map has **similar trends to the MSOA map**, due to the sizes of the zones being the same.
+
+## Conclusions
+
+The choropleth and LISA maps both provide a **clear illustration of how significant and important the MAUP is in mapping**. While this example is across a smaller set of data being used for illustrative purposes, **many larger studies must account for the MAUP in their methods and their findings, otherwise they are open to criticism and errors from the scale and zoning effects**. The **first set of maps** produced show how the same data can be presented very differently due to the different spatial levels of data aggregation occurring. The **second set of maps** show how these different geographic levels of analysis can impact statistical tests on data which are commonly used in many studies relying on geographic data. While the differences between OAs and LSOAs, or MSOAs and Wards are not extreme, the **major issues occur when different studies use OAs and MSOAs to present the same data, or the same study does not keep the geography level consistent throughout the report.** This report has shown the **effects of scale and zoning** (MSOA vs Ward) **on data**. Overall, this report shows the **extreme significance of the MAUP in GIS,** and how it is **critical to account for and mitigate these impacts.**
+
+There are ways to **mitigate** the impacts of the MAUP, such as **keeping the geography level consistent** throughout a study, comparing **what levels are used in previous studies**, and **stating why a specific geography unit level is chosen** for the study. My favourite mitigation strategy is to **create equally sized zones across a study area to aggregate data into**. Creating a **hexagon or square grid** across the study area and counting points, as outlined by Wong, 2021 here: <https://urbandatapalette.com/post/2021-08-tessellation-sf/> is a **very good method of standardising the geography** of the study area and to significantly **reduce the impacts of the scale and zoning effects** on the study. Unfortunately as **all 2021 England Census data is pre-aggregated** and can only be downloaded by specific unit area (e.g. LSOA/Ward), it is not possible to do this in this report. However **this method works with point data**, such as British Police Crime Data, and if you would like to view this method in action, **check out my GIS study of weapon possession crimes in West Midlands County (2023) here:** <https://vmistri91.github.io/Portfolio/social_atlas_weapons.html>, where most geospatial analysis in this study is conducted **using a hexagonal grid to count crimes.**
+
+## References
+
+Anselin, L. (1995) ‘Local Indicators of Spatial Association—LISA’, *Geographical Analysis*, 27, 2, 93-115, <https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x>.
+
+Bernard, C. (2019) *Immersing evolving geographic divisions in the semantic web*, Grenoble: Universite Grenoble Alpes, <https://www.researchgate.net/publication/340376528_Immersing_evolving_geographic_divisions_in_the_semantic_Web>.
+
+Fotheringham, A.S. and D.W.S Wong (1991) ‘The modifiable areal unit problem in multivariate statistical analysis’, *Environment and Planning A*, 23, 1, 1025-1044, <https://journals.sagepub.com/doi/10.1068/a231025>.
+
+Gimond, M. (2023) *Intro to GIS and spatial analysis*, ‘Chapter 13: Spatial autocorrelation’, <https://mgimond.github.io/Spatial/spatial-autocorrelation.html>.
+
+Lee, S. (2019) ‘Uncertainty in the effects of the modifiable areal unit problem under different levels of spatial autocorrelation: a simulation study’, *International Journal of Geographical Information Science*, 33, 1, 1135-1154, <https://www.tandfonline.com/doi/full/10.1080/13658816.2018.1542699>.
+
+Livings, M. and A.M. Wu (2020) ‘Local Measures of Spatial Association’ *The Geographic Information Science & Technology Body of Knowledge (3rd Quarter 2020 Edition)*, John P. Wilson (Ed.), <https://gistbok-topics.ucgis.org/AM-03-023>.
+
+Lovelace, R., Nowosad, J. and Muenchow, J. (2021) ‘Chapter 4: Spatial data operations’, *Geocomputation with R*, <https://bookdown.org/robinlovelace/geocompr/spatial-operations.html>.
+
+Oliveira, G.L.A., L. Lima, I. Silva, M.C. Riberio-Dantas, K.H. Monterio and P.T. Endo (2021) ‘Evaluating Social Distancing Measures and Their Association with the Covid-19 Pandemic in South America’, *International Journal of Geo-Information*, 10, 121, 1-35, <https://www.researchgate.net/publication/349718331_Evaluating_Social_Distancing_Measures_and_Their_Association_with_the_Covid-19_Pandemic_in_South_America>.
+
+Wong, D. (2009) ‘Modifiable Areal Unit Problem’, *International Encyclopedia of Human Geography*, 169-174, <https://www.sciencedirect.com/science/article/abs/pii/B9780080449104004752>.
+
+Wong, K. (2021) ‘Create spatial square/hexagon grids and count points inside in R with sf’, Hong Kong: Urban Data Palette, <https://urbandatapalette.com/post/2021-08-tessellation-sf/>.
