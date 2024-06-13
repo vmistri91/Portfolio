@@ -6,4 +6,4 @@ This is a portfolio of GIS based work I have created in RStudio, using technique
 
 If there are any questions or comments regarding the pages uploaded, please email me at vmistri91@gmail.com.
 
-Additionally, if you would like me to produce some maps using geographic data, please contact me at vmistri91@gmail.com for enquiries.
+Additionally, if you would like me to produce some maps using geographic data, please contact me at vmistri91@gmail.com for inquiries.
