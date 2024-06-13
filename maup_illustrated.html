@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Vishal Mistri GIS Portfolio - The Multiple Aerial Unit Problem Illustrated</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Vishal Mistri GIS Portfolio</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./social_atlas_weapons.html" aria-current="page"> 
+<span class="menu-text">A GIS study of weapon possession crimes in West Midlands County (2023)</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./map_presentation.html"> 
+<span class="menu-text">Map Presentation and Styles in RStudio using tmap</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./maup_illustrated.html"> 
+<span class="menu-text">The Multiple Aerial Unit Problem Illustrated</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./maup_illustrated.html">The Multiple Aerial Unit Problem Illustrated</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+      <a href="./index.html" class="sidebar-logo-link">
+      <img src="./assets/logo.svg" alt="" class="sidebar-logo py-0 d-lg-inline d-none">
+      </a>
+      <div class="sidebar-tools-main">
+    <a href="https://github.com/vmistri91/Portfolio" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./social_atlas_weapons.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">A GIS study of weapon possession crimes in West Midlands County (2023)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./map_presentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Map Presentation and Styles in RStudio using tmap</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./maup_illustrated.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">The Multiple Aerial Unit Problem Illustrated</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#understanding-the-maup" id="toc-understanding-the-maup" class="nav-link" data-scroll-target="#understanding-the-maup">Understanding the MAUP</a></li>
+  <li><a href="#data-sources" id="toc-data-sources" class="nav-link" data-scroll-target="#data-sources">Data Sources</a></li>
+  <li><a href="#data-preparation-overview" id="toc-data-preparation-overview" class="nav-link" data-scroll-target="#data-preparation-overview">Data Preparation: Overview</a></li>
+  <li><a href="#data-preparation-geopackages" id="toc-data-preparation-geopackages" class="nav-link" data-scroll-target="#data-preparation-geopackages">Data Preparation: Geopackages</a></li>
+  <li><a href="#data-preparation-ethnicity-data" id="toc-data-preparation-ethnicity-data" class="nav-link" data-scroll-target="#data-preparation-ethnicity-data">Data Preparation: Ethnicity Data</a></li>
+  <li><a href="#comparing-choropleth-maps" id="toc-comparing-choropleth-maps" class="nav-link" data-scroll-target="#comparing-choropleth-maps">Comparing Choropleth Maps</a></li>
+  <li><a href="#spatial-autocorrelation-method" id="toc-spatial-autocorrelation-method" class="nav-link" data-scroll-target="#spatial-autocorrelation-method">Spatial Autocorrelation: Method</a></li>
+  <li><a href="#conclusions" id="toc-conclusions" class="nav-link" data-scroll-target="#conclusions">Conclusions</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">The Multiple Aerial Unit Problem Illustrated</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
+<p>The <strong>Multiple Aerial Unit Problem</strong>, also known as the <strong>MAUP</strong>, is a <strong>major issue</strong> faced in geospatial analysis. The MAUP can directly impact the results of spatial analysis tasks, due to two factors: <strong>the scale of analysis, and the zoning of geographic regions.</strong> <em>This report aims to illustrate how the MAUP can affect the results of spatial analysis, by mapping different scales and zones of data on the same variable</em> (Ethnicity: Proportion of Asian Indians living in each data zone). The report will additionally show how further analysis beyond producing simple maps, such as spatial autocorrelation, is <strong>directly impacted</strong> by the MAUP.</p>
+<p>If you would like to reference this report please use the following reference:</p>
+<p>Mistri V. (2024) ‘The Multiple Aerial Unit Problem Illustrated’, <em>Vishal Mistri GIS Portfolio,</em> <a href="https://vmistri91.github.io/Portfolio/maup_illustrated.html" class="uri">https://vmistri91.github.io/Portfolio/maup_illustrated.html</a>.</p>
+</section>
+<section id="understanding-the-maup" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-the-maup">Understanding the MAUP</h2>
+<p>The MAUP arises when the <strong>results of geospatial analysis change depending on the spatial units used</strong>, such as Lower Super Output Areas (LSOAs) or Electoral Wards. As stated above, the MAUP is characterised by two effects: <strong>the scale effect and the zoning effect.</strong></p>
+<p><strong>The scale effect</strong> <strong>occurs when different results in the outcome occur as data has been aggregated at different levels of spatial resolution</strong>, for example, analysing data at the LSOA level versus the Ward level. When spatial units are <strong>larger</strong>, there can be a <strong>loss of detail</strong> and an increase in correlation between variables, potentially leading to inaccurate conclusions. Using the levels stated above, Wards are much larger than LSOAs, and may <strong>mask localised trends</strong> in the data being analysed. An example of the scale effect is shown below, showing that <strong>larger spatial units smooth variation and trends</strong> in the data (Source: <a href="https://gisgeography.com/maup-modifiable-areal-unit-problem/" class="uri">https://gisgeography.com/maup-modifiable-areal-unit-problem/</a>).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup scale.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="302"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>The zoning effect occurs when the boundaries of geospatial units are changed while retaining the same number of units</strong>. This may lead to inconsistencies in results, as the different ways of grouping data can significantly affect outcomes. A common example of this is the different ways of creating voting district boundaries, which can lead to different conclusions about voting patterns, known as <strong>‘gerrymandering’.</strong> An example of the zoning effect is shown below, where <strong>different divisions of the same data can create different zones which have a ‘blue’ or ‘red’ majority</strong> (Source: Bernard, 2019).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup zoning.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="425"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Throughout this report, the scale effect is a more significant concern, as <strong>UK census data is aggregated</strong> at many different spatial scales, compared to a smaller degree of zoning changes in London.</p>
+<p>The MAUP is <strong>extremely important</strong> in <em>geographical, sociological, political and economic analysis</em> as it can lead to <strong>ecological fallacies</strong> where incorrect assumptions and trends are interpreted about individuals using aggregated data. <strong>Understanding and mitigating the effects</strong> of the MAUP is an <strong>essential</strong> part of geospatial data analysis leading to accurate policy-making.</p>
+</section>
+<section id="data-sources" class="level2">
+<h2 class="anchored" data-anchor-id="data-sources">Data Sources</h2>
+<p>All spatial boundaries have been downloaded from the ONS Open Geography Portal <a href="https://geoportal.statistics.gov.uk/" class="uri">https://geoportal.statistics.gov.uk/</a>. Boundaries used include: 2021 Output Areas (OAs), 2021 Lower Super Output Areas (LSOAs), 2021 Middle Super Output Areas (MSOAs) and 2021 Electoral Wards.</p>
+<p>To obtain the 2021 census data on ethnicity across all spatial levels, the Nomis website can be used <a href="https://www.nomisweb.co.uk/" class="uri">https://www.nomisweb.co.uk/</a>.</p>
+<p>All of the files used in this report can be found in this Google Drive folder <a href="https://drive.google.com/drive/folders/1NexsgLGkDpfTyOAAL9_08LIlyelk1mbO?usp=sharing" class="uri">https://drive.google.com/drive/folders/1NexsgLGkDpfTyOAAL9_08LIlyelk1mbO?usp=sharing</a>.</p>
+</section>
+<section id="data-preparation-overview" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation-overview">Data Preparation: Overview</h2>
+<p><strong>This report will focus on the locations of Asian: Indian ethnic groups across London at different spatial levels</strong>, but there are many different data preparation steps to conduct, as the each different geopackage (<em>4: OA, LSOA, MSOA, Ward</em>), needs to be <strong>filtered</strong> to contain data for London, each ethnicity dataset needs to be <strong>merged</strong> correctly to its corresponding geopackage, and <strong>new variables</strong> for the proportion of people with Indian ethnicity need to be created before mapping.</p>
+<p><em>Feel free to skip these data preparation steps if you would like to go straight to the differences in geospatial analysis due to the scale effect.</em></p>
+</section>
+<section id="data-preparation-geopackages" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation-geopackages">Data Preparation: Geopackages</h2>
+<p>First, all the relevant packages for this report need to be <strong>loaded</strong> in.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load relevant packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spdep)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, all the <strong>geopackages</strong>, which contain geospatial information on the shape and characteristics of each data zone, need to be <strong>loaded</strong> into RStudio. While the OA, LSOA, MSOA files have matching geographic codes to the 2021 census data, the matching geopackage for the ward census data is the 2022 Ward file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load in all the 4 types of boundaries</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>OAs <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"2021_OA.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `OA_2021_EW_BGC_V2' from data source 
+  `C:\Users\vmist\Documents\Vishal\Vishal\PortfolioLocal\2021_OA.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 188880 features and 9 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 82668.52 ymin: 5352.6 xmax: 655653.8 ymax: 657539.4
+Projected CRS: OSGB36 / British National Grid</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>LSOAs <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"2021_LSOA.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `LSOA_2021_EW_BGC_V3' from data source 
+  `C:\Users\vmist\Documents\Vishal\Vishal\PortfolioLocal\2021_LSOA.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 35672 features and 7 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 82668.52 ymin: 5352.6 xmax: 655653.8 ymax: 657539.4
+Projected CRS: OSGB36 / British National Grid</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>MSOAs <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"2021_MSOA.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `MSOA_2021_EW_BGC_V2' from data source 
+  `C:\Users\vmist\Documents\Vishal\Vishal\PortfolioLocal\2021_MSOA.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 7264 features and 7 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 82668.52 ymin: 5352.6 xmax: 655653.8 ymax: 657539.4
+Projected CRS: OSGB36 / British National Grid</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Wards <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">"2022_Ward.gpkg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `WD_DEC_22_GB_BGC' from data source 
+  `C:\Users\vmist\Documents\Vishal\Vishal\PortfolioLocal\2022_Ward.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 8021 features and 11 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 5512.998 ymin: 5352.6 xmax: 655653.8 ymax: 1220299
+Projected CRS: OSGB36 / British National Grid</code></pre>
+</div>
+</div>
+<p>As shown in the message, the <strong><code>projected coordinate reference system</code></strong> (CRS) of these files is <code>'British National Grid'</code>, which is good, as this is the standard CRS for the UK.</p>
+<p>Now the data zones for <strong>London</strong> need to be <strong>filtered</strong> out of these larger geopackages, which contain data for the whole of England. For those unfamiliar with the shape of London, a map is included below with the shape and names of all the boroughs within Greater London (Source: <a href="https://fity.club/lists/suggestions/boroughs-of-london-map/" class="uri">https://fity.club/lists/suggestions/boroughs-of-london-map/</a>).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="london boroughs map.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img" width="362"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There are <strong>different ways of conducting this filter</strong> for different types of geopackages, so I will first <strong>start with the OA boundaries</strong>. As not all the OAs in London are listed in consecutive rows of the dataset, directly extracting the rows of interest is not possible. In the column <code>LSOA21NM</code>, the name of the London borough associated with the OA is named, so the <strong>best way</strong> to filter this data is to use the <code>grepl</code> function which <strong>extracts all rows which contain the name</strong> of each of the 32 London boroughs and the City of London to form a new dataset, as shown below.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>OA_London <span class="ot">&lt;-</span> OAs[<span class="fu">grepl</span>(<span class="st">'City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster'</span>, OAs<span class="sc">$</span>LSOA21NM), ]</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Test shape to see if all OAs have transferred</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(OA_London)<span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  tm_borders</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>All OAs in Greater London have been selected correctly, but there is a <strong>discrepancy</strong> on this map in the North East. As the <code>grepl</code> function is extracting all rows which contain the words listed above, <strong>it has also extracted OAs in a different region just outside of London</strong>. In London, there is a borough called ‘Brent’, but in Essex there is an area called ‘Brentwood’, so <code>grepl</code> has extracted LSOAs within <code>Brentwood</code> as well as <code>Brent</code>. To fix this, the <code>Brentwood</code> <strong>wards can be removed</strong> from the dataset.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove Brentwood</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>OA_London <span class="ot">&lt;-</span> <span class="fu">subset</span>(OA_London, <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Brentwood"</span>, LSOA21NM, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Test to see if shape is correct</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(OA_London)<span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now this map is an <strong>accurate depiction</strong> of all the OAs within Greater London.</p>
+<p>The <strong>same process</strong> as above can be conducted to filter out LSOAs within London. The difference will be that there are <strong>less LSOAs</strong>, as <strong>LSOAs are a larger spatial unit than OAs.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter LSOAs using grepl</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>LSOA_London <span class="ot">&lt;-</span> LSOAs[<span class="fu">grepl</span>(<span class="st">'City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster'</span>, LSOAs<span class="sc">$</span>LSOA21NM), ]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove Brentwood</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>LSOA_London <span class="ot">&lt;-</span> <span class="fu">subset</span>(LSOA_London, <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Brentwood"</span>, LSOA21NM, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Test shape to see if all LSOAs have transferred</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(LSOA_London)<span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This map is an <strong>accurate depiction</strong> of all the LSOAs within Greater London.</p>
+<p>The <strong>same process</strong> as above can be conducted to filter out MSOAs within London. The difference will be that there are <strong>less MSOAs</strong>, as <strong>MSOAs are a larger spatial unit than LSOAs.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter MSOAs using grepl</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>MSOA_London <span class="ot">&lt;-</span> MSOAs[<span class="fu">grepl</span>(<span class="st">'City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster'</span>, MSOAs<span class="sc">$</span>MSOA21NM), ]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove Brentwood</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>MSOA_London <span class="ot">&lt;-</span> <span class="fu">subset</span>(MSOA_London, <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Brentwood"</span>, MSOA21NM, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Check Shape</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(MSOA_London)<span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is an <strong>accurate</strong> map of the MSOAs within London, where MSOAs are visibly larger than LSOAs.</p>
+<p>For the Ward data the same <code>grepl</code> method can be used. The difference will be that there are <strong>less Wards</strong>, as <strong>Wards are typically larger than MSOAs.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Filter Wards using grepl</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>Ward_London <span class="ot">&lt;-</span> Wards[<span class="fu">grepl</span>(<span class="st">'City of London|Barking and Dagenham|Barnet|Bexley|Brent|Bromley|Camden|Croydon|Ealing|Enfield|Greenwich|Hackney|Hammersmith and Fulham|Haringey|Harrow|Havering|Hillingdon|Hounslow|Islington|Kensington and Chelsea|Kingston upon Thames|Lambeth|Lewisham|Merton|Newham|Redbridge|Richmond upon Thames|Southwark|Sutton|Tower Hamlets|Waltham Forest|Wandsworth|Westminster'</span>, Wards<span class="sc">$</span>LAD22NM), ]</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove Brentwood</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>Ward_London <span class="ot">&lt;-</span> <span class="fu">subset</span>(Ward_London, <span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Brentwood"</span>, LAD22NM, <span class="at">ignore.case =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Check Shape</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(Ward_London)<span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is an <strong>accurate</strong> representation of all the Wards in Greater London.</p>
+<p>In the maps produced, it is a good idea to <strong>provide outlines of all the boroughs in London</strong>, to make it easier to identify zones of interest. Below is an <strong>overview</strong> of how to do this, from <strong>extracting</strong> rows of data which contain London Boroughs, to <strong>producing a quick map.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load .gpkg containing information on Local Authorities</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>LAs_2021 <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">'Local_Authority_Districts_December_2021_GB_BGC.gpkg'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `LAD_DEC_2021_GB_BGC' from data source 
+  `C:\Users\vmist\Documents\Vishal\Vishal\PortfolioLocal\Local_Authority_Districts_December_2021_GB_BGC.gpkg' 
+  using driver `GPKG'
+Simple feature collection with 363 features and 8 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 5512.998 ymin: 5352.6 xmax: 655653.8 ymax: 1220302
+Projected CRS: OSGB36 / British National Grid</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Extract rows which contain information on London boroughs</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>rows_to_extract <span class="ot">&lt;-</span> <span class="dv">277</span><span class="sc">:</span><span class="dv">309</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>London_Boroughs <span class="ot">&lt;-</span> LAs_2021[rows_to_extract, ]</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Create a basic map of boroughs</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(London_Boroughs)<span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>() <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="data-preparation-ethnicity-data" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation-ethnicity-data">Data Preparation: Ethnicity Data</h2>
+<p>Now that the geopackages have been prepared for the analysis, by selecting data zones which only lie within Greater London, the <strong>ethnicity data can be loaded and prepared</strong> in R for the analysis. All the ethnicity census files are in the <code>.csv</code> file format which can be read by R easily.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Load in all the ethnicity datasets at each geographic level</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>Ethnicity_OA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ts021/census2021-ts021-oa.csv"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>Ethnicity_LSOA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ts021/census2021-ts021-lsoa.csv"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>Ethnicity_MSOA <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ts021/census2021-ts021-msoa.csv"</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>Ethnicity_Ward <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"ts021/census2021-ts021-ward.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Upon inspection of these datasets, the <strong>names of the columns are all very long</strong>, so the columns relevant to this report should be <strong>shortened</strong>, to make it easier to write code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Rename the Indian ethnicity and total population columns to make them shorter for each data frame</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Ethnicity_OA<span class="sc">$</span>Indian <span class="ot">&lt;-</span> Ethnicity_OA<span class="sc">$</span>Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>Ethnicity_LSOA<span class="sc">$</span>Indian <span class="ot">&lt;-</span> Ethnicity_LSOA<span class="sc">$</span>Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>Ethnicity_MSOA<span class="sc">$</span>Indian <span class="ot">&lt;-</span> Ethnicity_MSOA<span class="sc">$</span>Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>Ethnicity_Ward<span class="sc">$</span>Indian <span class="ot">&lt;-</span> Ethnicity_Ward<span class="sc">$</span>Ethnic.group..Asian..Asian.British.or.Asian.Welsh..Indian</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>Ethnicity_OA<span class="sc">$</span>Total <span class="ot">&lt;-</span> Ethnicity_OA<span class="sc">$</span>Ethnic.group..Total..All.usual.residents</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>Ethnicity_LSOA<span class="sc">$</span>Total <span class="ot">&lt;-</span> Ethnicity_LSOA<span class="sc">$</span>Ethnic.group..Total..All.usual.residents</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>Ethnicity_MSOA<span class="sc">$</span>Total <span class="ot">&lt;-</span> Ethnicity_MSOA<span class="sc">$</span>Ethnic.group..Total..All.usual.residents</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>Ethnicity_Ward<span class="sc">$</span>Total <span class="ot">&lt;-</span> Ethnicity_Ward<span class="sc">$</span>Ethnic.group..Total..All.usual.residents</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now these data frames can be <strong>merged</strong> to their respective spatial dataframes. A <strong>left join</strong> is conducted here, indicated by <code>'all.x=T'</code>, as this allows <strong>all of the geographic regions from the spatial objects</strong> (such as <code>OA_London</code>) <strong>to be preserved</strong>. This means that if there is missing data for ethnicity for a particular data zone, the data zone will still be mapped and not removed from the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Merge geographic data with ethnicity data</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London<span class="ot">&lt;-</span> <span class="fu">merge</span>(OA_London, Ethnicity_OA, <span class="at">by.x=</span><span class="st">"OA21CD"</span>, <span class="at">by.y=</span><span class="st">"geography.code"</span>, <span class="at">all.x=</span>T)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London<span class="ot">&lt;-</span> <span class="fu">merge</span>(LSOA_London, Ethnicity_LSOA, <span class="at">by.x=</span><span class="st">"LSOA21CD"</span>, <span class="at">by.y=</span><span class="st">"geography.code"</span>, <span class="at">all.x=</span>T)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London<span class="ot">&lt;-</span> <span class="fu">merge</span>(MSOA_London, Ethnicity_MSOA, <span class="at">by.x=</span><span class="st">"MSOA21CD"</span>, <span class="at">by.y=</span><span class="st">"geography.code"</span>, <span class="at">all.x=</span>T)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London<span class="ot">&lt;-</span> <span class="fu">merge</span>(Ward_London, Ethnicity_Ward, <span class="at">by.x=</span><span class="st">"WD22CD"</span>, <span class="at">by.y=</span><span class="st">"geography.code"</span>, <span class="at">all.x=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now the data should be <strong>checked</strong> <strong>for</strong> <strong>NA</strong> values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Check for NAs in relevant columns</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(OA_Ethnicity_London<span class="sc">$</span>Indian))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(LSOA_Ethnicity_London<span class="sc">$</span>Indian))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(MSOA_Ethnicity_London<span class="sc">$</span>Indian))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Ward_Ethnicity_London<span class="sc">$</span>Indian))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(OA_Ethnicity_London<span class="sc">$</span>Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(LSOA_Ethnicity_London<span class="sc">$</span>Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(MSOA_Ethnicity_London<span class="sc">$</span>Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Ward_Ethnicity_London<span class="sc">$</span>Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 25</code></pre>
+</div>
+</div>
+<p>There appears to be an <strong>issue with NAs in the <code>Ward_Ethnicity_London</code> data frame</strong>. In the <code>Ethnicity_Ward</code> data frame, there is <strong>no information on ethnicity in the City of London.</strong> To solve this issue, all wards in the City of London will be <strong>removed</strong> from <code>Ward_Ethnicity_London</code>, and this should not cause many issues as the City of London is very small and their wards are much smaller than a standard sized ward.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Remove City of London rows</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">%&gt;%</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Check for NAs</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Ward_Ethnicity_London<span class="sc">$</span>Indian))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(Ward_Ethnicity_London<span class="sc">$</span>Total))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>All is fixed now.</p>
+<p>Before creating maps, it is a good idea to <strong>work out the proportion of Indians</strong> in every data zone, <strong>instead</strong> <strong>of</strong> mapping the <strong>absolute count</strong>, as this would be <strong>misleading</strong>, and this <strong>ensures consistency across all of the maps.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create % of Indians in data zone variable</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London<span class="sc">$</span>Indianperc <span class="ot">&lt;-</span> (OA_Ethnicity_London<span class="sc">$</span>Indian<span class="sc">/</span>OA_Ethnicity_London<span class="sc">$</span>Total)<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London<span class="sc">$</span>Indianperc <span class="ot">&lt;-</span> (LSOA_Ethnicity_London<span class="sc">$</span>Indian<span class="sc">/</span>LSOA_Ethnicity_London<span class="sc">$</span>Total)<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London<span class="sc">$</span>Indianperc <span class="ot">&lt;-</span> (MSOA_Ethnicity_London<span class="sc">$</span>Indian<span class="sc">/</span>MSOA_Ethnicity_London<span class="sc">$</span>Total)<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London<span class="sc">$</span>Indianperc <span class="ot">&lt;-</span> (Ward_Ethnicity_London<span class="sc">$</span>Indian<span class="sc">/</span>Ward_Ethnicity_London<span class="sc">$</span>Total)<span class="sc">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="comparing-choropleth-maps" class="level2">
+<h2 class="anchored" data-anchor-id="comparing-choropleth-maps">Comparing Choropleth Maps</h2>
+<p>Now it is time to see what the different maps look like, and <strong>identify the differences between each map</strong> due to the different scales used in the aggregation of the ethnicity data. If you would like to know how to make a presentable map in RStudio, please view my page on “Map Presentation and Styles in RStudio using tmap” <a href="https://vmistri91.github.io/Portfolio/map_presentation.html" class="uri">https://vmistri91.github.io/Portfolio/map_presentation.html</a>.</p>
+<p>After quickly inspecting the data, the <strong>highest percentage in a particular data zone is near 85%</strong>, so I will be creating <strong>8 data classes equally spaced out in 11 unit increments, for every map</strong> to ensure consistency. I will also be using the same colour palette in all maps to help visualise the differences in using different geographic levels.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set class break intervals</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">11</span>,<span class="dv">22</span>,<span class="dv">33</span>,<span class="dv">44</span>,<span class="dv">55</span>,<span class="dv">66</span>,<span class="dv">77</span>,<span class="dv">88</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The first map produced will show <strong>Asian:Indian ethnicity across all OAs</strong> in London</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create OA map</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(OA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"Indianperc"</span>,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">'YlOrRd'</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">n=</span><span class="dv">8</span>,</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">breaks=</span>breaks,</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"% of Asian:Indian people"</span>) <span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>,</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"% of Asian:Indian persons by OA in London (2021)"</span>,</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span>  </span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a <strong>very detailed map</strong> which shows that the <strong>highest percentages</strong> of Asian:Indians are located in <strong>North-West and West London,</strong> mainly in the boroughs of Harrow, Brent, Ealing and Hounslow. There are also other higher percentages located in the Newham/Redbridge areas. The <em>highest percentages are found in Kenton/Kingsbury (Harrow/Brent), Wembley/Alperton/Sudbury (Brent) and Southall (Ealing/Hounslow).</em> As the map is of a high resolution, showing small areas, certain output areas reach up to 88% Asian:Indian ethnicity, and can be identified on the map.</p>
+<p>Now lets look at the same data, but at the <strong>LSOA resolution.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create LSOA map</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(LSOA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"Indianperc"</span>,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">'YlOrRd'</span>,</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">n=</span><span class="dv">8</span>,</span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">breaks=</span>breaks,</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"% of Asian:Indian people"</span>) <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>,</span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"% of Asian:Indian persons by LSOA in London (2021)"</span>,</span>
+<span id="cb44-17"><a href="#cb44-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb44-18"><a href="#cb44-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb44-19"><a href="#cb44-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb44-20"><a href="#cb44-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb44-21"><a href="#cb44-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb44-22"><a href="#cb44-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span>  </span>
+<span id="cb44-23"><a href="#cb44-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb44-24"><a href="#cb44-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb44-25"><a href="#cb44-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb44-26"><a href="#cb44-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb44-27"><a href="#cb44-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb44-28"><a href="#cb44-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb44-29"><a href="#cb44-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb44-30"><a href="#cb44-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first major difference between this map and the OA map is that there are <strong>less regions with higher percentages (coloured towards dark red)</strong> visible on the map, <strong>due to the aggregation of many smaller OAs in a region to form an LSOA.</strong> While the 3 key areas identified above are clearly visible still, they are <strong>one to two shades lighter in colou</strong>r, as are many of their surrounding areas. <em>The highest percentage value for an LSOA is now 70.2% down from the mid 80% in the OA map.</em> This is due to the aggregation of spatial units from MAUP’s scale effect.</p>
+<p>Now lets look at the same data, but at the <strong>MSOA level.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create MSOA map</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(MSOA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"Indianperc"</span>,</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">'YlOrRd'</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">n=</span><span class="dv">8</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">breaks=</span>breaks,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"% of Asian:Indian people"</span>) <span class="sc">+</span></span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>,</span>
+<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"% of Asian:Indian persons by MSOA in London (2021)"</span>,</span>
+<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span>  </span>
+<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As the spatial units get larger, it is clear that <strong>the trends are smoothed out and averaged due to the scale effect</strong>. <em>Now the highest percentage is now only 52.7% down from the 70-80% range above.</em> It has also now become <strong>more difficult to identify the areas with the highest percentages of Asian:Indians, as the colour gradient has become less divergent,</strong> meaning trends are harder to spot. Areas on thee east side of London are hardly noticeable to have a higher percentage of Asian:Indians, even though in the OA map, certain OAs in Redbridge and Newham are in the 44-66% range.</p>
+<p>Now lets look at the same data at the <strong>Ward level.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Ward map</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(Ward_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"Indianperc"</span>,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">style =</span> <span class="st">"fixed"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">palette =</span> <span class="st">'YlOrRd'</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">n=</span><span class="dv">8</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">breaks=</span>breaks,</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">title =</span> <span class="st">"% of Asian:Indian people"</span>) <span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>,</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>,</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"% of Asian:Indian persons by Ward in London (2021)"</span>,</span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span>  </span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With <strong>Wards being only slightly larger than MSOAs</strong> in some cases, the <strong>trends are very similar</strong>, where most percentages have been smoothed to create lower percentage values over larger areas. What is of interest here is that <strong>due to the zoning effect, certain wards have higher percentages over the previous map</strong>, due to the slightly different borders of the boundary in the same area. This is evident in Wembley Central, Southall Green, Southall West and Kenton West, which have higher percentages in this map compared to comparably sized areas in the MSOA map.</p>
+<p>After viewing all of these maps with different scales, it should be <strong>clear that the MAUP is a significant issue in GIS studies</strong>, with the scale effect, and zoning effect (to an extent), creating many different trends visible across the different maps. <strong>Maps with smaller zones, such as OAs, provide more detail of the trends, and maps with larger zones, such as Wards/MSOAs, smooth variation of the trends</strong>, due to the way the data has been <strong>aggregated</strong> at a larger geographic level.</p>
+<p>However, it is important to understand just how significant the MAUP is in geospatial analysis by viewing how the different spatial resolutions above <strong>impact a spatial autocorrelation calculation</strong>, which is a commonly used query in GIS to <strong>identify clusters of a variable across an area.</strong></p>
+</section>
+<section id="spatial-autocorrelation-method" class="level2">
+<h2 class="anchored" data-anchor-id="spatial-autocorrelation-method">Spatial Autocorrelation: Method</h2>
+<p>One useful technique is <strong>spatial autocorrelation</strong>, which <em>measures the degree to which similar values (of Asian:Indian ethnicity) occur near each other in a study region, in a positive or negative manner</em>. This concept links to <strong>Tobler’s Fist Law of Geography</strong> which is “Everything is related to everything else, but near things are more related than distant things”, a foundational concept in GIS. Since this concept looks at neighbour relations between data zones, it will be <strong>impacted by the scale effect of the MAUP</strong>, which will be illustrated in this section. The <strong>scale effect</strong> has a significant impact on spatial autocorrelation as <em>when data is aggregated into larger spatial units, internal variability among the data decreases, which leads to smoother data.</em> This could lead to higher spatial autocorrelation results when unit areas are larger and lower correlations when units are smaller, even though the data is the same, but just altered by scale.</p>
+<p>For a <strong>complete overview of how spatial autocorrelation works</strong>, the methods behind calculations, and definitions of key terms, <strong>I recommend reading my GIS study of weapon possession crimes in West Midlands County (2023), specifically the spatial autocorrelation section here:</strong> <a href="https://vmistri91.github.io/Portfolio/social_atlas_weapons.html" class="uri">https://vmistri91.github.io/Portfolio/social_atlas_weapons.html</a>.</p>
+<p>The first step of spatial autocorrelation is to <strong>define the neighbour relationship</strong> between the data zones in each set of data. For this report <strong>Queen’s Case contiguity</strong> <strong>will be used</strong>, <em>which defines a data zone’s neighbours as zones which are adjacent with a common border to the main zone.</em> Queen’s case is used instead of Rook’s case, as this only forms partial neighbour relations, which is <strong>inappropriate</strong> for this study. Fixed distance definition is not used as specifying a radius from each data zone may be <strong>unreliable</strong>, due to the nature of ethnicity data patterns, and the different scales of geographic regions being studied. The image below provides an illustration of how Queen’s Case contiguity works (Source: Oliveria et al., 2021).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="contiguity.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="377"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>Queen’s case contiguity</strong> needs to be <strong>set</strong> for all of the different datasets below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set Queen neighbours for all datasets</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>OA_neighbours_queen <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">poly2nb</span>(<span class="at">queen =</span> T)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>LSOA_neighbours_queen <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">poly2nb</span>(<span class="at">queen =</span> T)</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>MSOA_neighbours_queen <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">poly2nb</span>(<span class="at">queen =</span> T)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>Ward_neighbours_queen <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">poly2nb</span>(<span class="at">queen =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now a <strong>list of all the neighbour relations needs to be created</strong> in order to conduct the autocorrelation test.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create neighbours list</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>OA_spatial_weights_queen <span class="ot">&lt;-</span> OA_neighbours_queen <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nb2listw</span>(<span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>LSOA_spatial_weights_queen <span class="ot">&lt;-</span> LSOA_neighbours_queen <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nb2listw</span>(<span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>MSOA_spatial_weights_queen <span class="ot">&lt;-</span> MSOA_neighbours_queen <span class="sc">|&gt;</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nb2listw</span>(<span class="at">style =</span> <span class="st">"W"</span>)</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>Ward_spatial_weights_queen <span class="ot">&lt;-</span> Ward_neighbours_queen <span class="sc">|&gt;</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nb2listw</span>(<span class="at">style =</span> <span class="st">"W"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Local</strong> spatial autocorrelation measures identify the <strong>degree of clustering or dispersion</strong> of the data <strong>in each data zone across the entire study area</strong>. <strong>Moran’s I</strong>, which quantifies the degree of autocorrelation, providing correlation coefficients between an area and its neighbours, is used. <em>A score is provided between 1 and -1, with 1 indicating perfect clustering, and -1 indicating perfect dispersion.</em></p>
+<p>We first need to <strong>calculate local Moran’s I coefficients</strong> for the OA dataset. The result has complicated headings, so these can be <strong>simplified</strong> for ease. Once this is done, the values can be <strong>binded</strong> to the original <code>OA_Ethnicity_London</code> data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Conduct Local Moran's I for OA</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>OA_local_moran_queen <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Indianperc) <span class="sc">|&gt;</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>() <span class="sc">|&gt;</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">localmoran</span>(OA_spatial_weights_queen)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a><span class="co">#Inspect result</span></span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(OA_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Ii          E.Ii     Var.Ii      Z.Ii Pr(z != E(Ii))
+1 0.26611689 -1.932836e-05 0.08492718 0.9132310      0.3611211
+2 0.10072585 -2.536921e-06 0.01337715 0.8709037      0.3838068
+3 0.09112807 -4.306515e-06 0.02838627 0.5409019      0.5885752
+4 0.17992777 -1.556351e-05 0.05128485 0.7945866      0.4268540
+5 0.17912212 -1.077305e-05 0.07100980 0.6722274      0.5014390
+6 0.15289529 -6.487213e-06 0.03420685 0.8267153      0.4083985</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Update heading names</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>OA_local_moran_queen <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(OA_local_moran_queen)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(OA_local_moran_queen) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LMI_Ii"</span>, <span class="st">"LMI_eIi"</span>, <span class="st">"LMI_varIi"</span>, <span class="st">"LMI_zIi"</span>, <span class="st">"LMI_sigP"</span>)</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Join the data frames together</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(OA_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The above steps can be <strong>repeated</strong> for the other different data zones as shown below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="do">##### For LSOA #####</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Conduct Local Moran's I for OA</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>LSOA_local_moran_queen <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Indianperc) <span class="sc">|&gt;</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>() <span class="sc">|&gt;</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">localmoran</span>(LSOA_spatial_weights_queen)</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Inspect result</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(LSOA_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Ii          E.Ii       Var.Ii      Z.Ii Pr(z != E(Ii))
+1 0.14512165 -3.468234e-05 0.0346117676 0.7802326      0.4352540
+2 0.15897758 -4.740157e-05 0.0591424933 0.6539063      0.5131721
+3 0.24751054 -5.556299e-05 0.0554487612 1.0513450      0.2931002
+4 0.10239062 -5.821126e-05 0.0483998297 0.4656773      0.6414465
+5 0.02153611 -6.204773e-06 0.0077419554 0.2448314      0.8065870
+6 0.03988094 -9.743883e-07 0.0008102028 1.4011323      0.1611745</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Update heading names</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>LSOA_local_moran_queen <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(LSOA_local_moran_queen)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(LSOA_local_moran_queen) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LMI_Ii"</span>, <span class="st">"LMI_eIi"</span>, <span class="st">"LMI_varIi"</span>, <span class="st">"LMI_zIi"</span>, <span class="st">"LMI_sigP"</span>)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Join the data frames together</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(LSOA_local_moran_queen)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a><span class="do">##### For MSOA #####</span></span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Conduct Local Moran's I for OA</span></span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>MSOA_local_moran_queen <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Indianperc) <span class="sc">|&gt;</span></span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>() <span class="sc">|&gt;</span></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">localmoran</span>(MSOA_spatial_weights_queen)</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Inspect result</span></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(MSOA_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Ii          E.Ii      Var.Ii       Z.Ii Pr(z != E(Ii))
+1  0.1590915 -0.0001472235 0.014616879  1.3171080      0.1878024
+2 -0.0562219 -0.0000391453 0.006504324 -0.6966296      0.4860346
+3  0.1152409 -0.0001002666 0.012469230  1.0329147      0.3016438
+4  0.1490965 -0.0001836530 0.036650107  0.7797662      0.4355285
+5 -0.0548776 -0.0001461631 0.029169655 -0.3204581      0.7486211
+6  0.1410871 -0.0002790292 0.046351952  0.6566157      0.5114281</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Update heading names</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>MSOA_local_moran_queen <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(MSOA_local_moran_queen)</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(MSOA_local_moran_queen) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LMI_Ii"</span>, <span class="st">"LMI_eIi"</span>, <span class="st">"LMI_varIi"</span>, <span class="st">"LMI_zIi"</span>, <span class="st">"LMI_sigP"</span>)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Join the data frames together</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(MSOA_local_moran_queen)</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="do">##### For Ward #####</span></span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="co">#Conduct Local Moran's I for OA</span></span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>Ward_local_moran_queen <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb56-12"><a href="#cb56-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Indianperc) <span class="sc">|&gt;</span></span>
+<span id="cb56-13"><a href="#cb56-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.vector</span>() <span class="sc">|&gt;</span></span>
+<span id="cb56-14"><a href="#cb56-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">localmoran</span>(Ward_spatial_weights_queen)</span>
+<span id="cb56-15"><a href="#cb56-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-16"><a href="#cb56-16" aria-hidden="true" tabindex="-1"></a><span class="co">#Inspect result</span></span>
+<span id="cb56-17"><a href="#cb56-17" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(Ward_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Ii          E.Ii      Var.Ii       Z.Ii Pr(z != E(Ii))
+1  0.308941095 -4.286238e-04 0.041190367  1.5243334      0.1274254
+2 -0.009863986 -6.054243e-06 0.001366221 -0.2667014      0.7896990
+3  0.249721921 -4.844210e-04 0.054389069  1.0728586      0.2833345
+4  0.362365655 -5.418251e-04 0.052063014  1.5904912      0.1117241
+5  0.259994708 -4.469226e-04 0.050180767  1.1626306      0.2449794
+6  0.303945479 -5.171660e-04 0.087354712  1.0301272      0.3029503</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Update heading names</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>Ward_local_moran_queen <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(Ward_local_moran_queen)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Ward_local_moran_queen) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"LMI_Ii"</span>, <span class="st">"LMI_eIi"</span>, <span class="st">"LMI_varIi"</span>, <span class="st">"LMI_zIi"</span>, <span class="st">"LMI_sigP"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Join the data frames together</span></span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(Ward_local_moran_queen)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Using both Moran’s I values and statistical significance for each data zone, a <strong>Local Indicators of Spatial Autocorrelation (LISA)</strong> map can be created, as outlined by Anselin (1995) here <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x" class="uri">https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x</a>. The map creates 4 quadrants, which identify different types of spatial autocorrelation. <strong>Low-low</strong> identifies areas with low values surrounded by low values of crime and <strong>high-high</strong> identifies areas with high values surrounded by high values of crime. <strong>High-low</strong> identifies areas with a high value surrounded by areas with low values, and <strong>Low-high</strong> identifies areas with a low value surrounded by areas with high values, essentially identifying hexagons which are outliers.</p>
+<p>To create this map, significance breaks and a significance level need to be set. In this study, the <strong>significance level is set to 0.05.</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set Significance breaks for each dataset</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs_diff =</span> (Indianperc <span class="sc">-</span> <span class="fu">mean</span>(OA_Ethnicity_London<span class="sc">$</span>Indianperc)))</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs_diff =</span> (Indianperc <span class="sc">-</span> <span class="fu">mean</span>(LSOA_Ethnicity_London<span class="sc">$</span>Indianperc)))</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs_diff =</span> (Indianperc <span class="sc">-</span> <span class="fu">mean</span>(MSOA_Ethnicity_London<span class="sc">$</span>Indianperc)))</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs_diff =</span> (Indianperc <span class="sc">-</span> <span class="fu">mean</span>(Ward_Ethnicity_London<span class="sc">$</span>Indianperc)))</span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a><span class="co">#Compare local Local Moran's I value with mean value for each dataset</span></span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LMI_diff =</span> (OA_Ethnicity_London<span class="sc">$</span>LMI_Ii <span class="sc">-</span> <span class="fu">mean</span>(OA_Ethnicity_London<span class="sc">$</span>LMI_Ii)))</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LMI_diff =</span> (LSOA_Ethnicity_London<span class="sc">$</span>LMI_Ii <span class="sc">-</span> <span class="fu">mean</span>(LSOA_Ethnicity_London<span class="sc">$</span>LMI_Ii)))</span>
+<span id="cb59-16"><a href="#cb59-16" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-17"><a href="#cb59-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LMI_diff =</span> (MSOA_Ethnicity_London<span class="sc">$</span>LMI_Ii <span class="sc">-</span> <span class="fu">mean</span>(MSOA_Ethnicity_London<span class="sc">$</span>LMI_Ii)))</span>
+<span id="cb59-18"><a href="#cb59-18" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb59-19"><a href="#cb59-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">LMI_diff =</span> (Ward_Ethnicity_London<span class="sc">$</span>LMI_Ii <span class="sc">-</span> <span class="fu">mean</span>(Ward_Ethnicity_London<span class="sc">$</span>LMI_Ii)))</span>
+<span id="cb59-20"><a href="#cb59-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-21"><a href="#cb59-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Set significance threshold</span></span>
+<span id="cb59-22"><a href="#cb59-22" aria-hidden="true" tabindex="-1"></a>signif <span class="ot">&lt;-</span> <span class="fl">0.05</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <strong>four different types of clusters can then be identified</strong> for each dataset, and colour palette can be selected for each of the maps which will be produced for each set of data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Set the four types of clusters that can be present for each set of data</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>OA_Ethnicity_London <span class="ot">&lt;-</span> OA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cluster_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-High"</span>,</span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-Low"</span>,</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-High"</span>,</span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-Low"</span>,</span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a>    LMI_sigP <span class="sc">&gt;</span> signif <span class="sc">~</span> <span class="st">"No Significance"</span>))</span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>LSOA_Ethnicity_London <span class="ot">&lt;-</span> LSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cluster_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-High"</span>,</span>
+<span id="cb60-12"><a href="#cb60-12" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-Low"</span>,</span>
+<span id="cb60-13"><a href="#cb60-13" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-High"</span>,</span>
+<span id="cb60-14"><a href="#cb60-14" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-Low"</span>,</span>
+<span id="cb60-15"><a href="#cb60-15" aria-hidden="true" tabindex="-1"></a>    LMI_sigP <span class="sc">&gt;</span> signif <span class="sc">~</span> <span class="st">"No Significance"</span>))</span>
+<span id="cb60-16"><a href="#cb60-16" aria-hidden="true" tabindex="-1"></a>MSOA_Ethnicity_London <span class="ot">&lt;-</span> MSOA_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb60-17"><a href="#cb60-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cluster_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb60-18"><a href="#cb60-18" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-High"</span>,</span>
+<span id="cb60-19"><a href="#cb60-19" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-Low"</span>,</span>
+<span id="cb60-20"><a href="#cb60-20" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-High"</span>,</span>
+<span id="cb60-21"><a href="#cb60-21" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-Low"</span>,</span>
+<span id="cb60-22"><a href="#cb60-22" aria-hidden="true" tabindex="-1"></a>    LMI_sigP <span class="sc">&gt;</span> signif <span class="sc">~</span> <span class="st">"No Significance"</span>))</span>
+<span id="cb60-23"><a href="#cb60-23" aria-hidden="true" tabindex="-1"></a>Ward_Ethnicity_London <span class="ot">&lt;-</span> Ward_Ethnicity_London <span class="sc">|&gt;</span></span>
+<span id="cb60-24"><a href="#cb60-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">cluster_type =</span> <span class="fu">case_when</span>(</span>
+<span id="cb60-25"><a href="#cb60-25" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-High"</span>,</span>
+<span id="cb60-26"><a href="#cb60-26" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-Low"</span>,</span>
+<span id="cb60-27"><a href="#cb60-27" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"Low-High"</span>,</span>
+<span id="cb60-28"><a href="#cb60-28" aria-hidden="true" tabindex="-1"></a>    obs_diff <span class="sc">&gt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_diff <span class="sc">&lt;</span> <span class="dv">0</span> <span class="sc">&amp;</span> LMI_sigP <span class="sc">&lt;</span> signif <span class="sc">~</span> <span class="st">"High-Low"</span>,</span>
+<span id="cb60-29"><a href="#cb60-29" aria-hidden="true" tabindex="-1"></a>    LMI_sigP <span class="sc">&gt;</span> signif <span class="sc">~</span> <span class="st">"No Significance"</span>))</span>
+<span id="cb60-30"><a href="#cb60-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-31"><a href="#cb60-31" aria-hidden="true" tabindex="-1"></a><span class="co">#Count cluster types for each dataset</span></span>
+<span id="cb60-32"><a href="#cb60-32" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(OA_Ethnicity_London, cluster_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 4 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 503574.2 ymin: 155850.8 xmax: 561956.7 ymax: 200933.6
+Projected CRS: OSGB36 / British National Grid
+     cluster_type     n                       geometry
+1       High-High  2614 MULTIPOLYGON (((510039.9 17...
+2        High-Low   394 MULTIPOLYGON (((509270.8 17...
+3         Low-Low   142 MULTIPOLYGON (((512347 1732...
+4 No Significance 23219 MULTIPOLYGON (((510797.4 17...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(LSOA_Ethnicity_London, cluster_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 4 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 503574.2 ymin: 155850.8 xmax: 561956.7 ymax: 200933.6
+Projected CRS: OSGB36 / British National Grid
+     cluster_type    n                       geometry
+1       High-High  564 MULTIPOLYGON (((510255 1734...
+2        High-Low   67 MULTIPOLYGON (((510802.7 17...
+3         Low-Low   17 MULTIPOLYGON (((531353.8 17...
+4 No Significance 4346 MULTIPOLYGON (((520076.5 16...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(MSOA_Ethnicity_London, cluster_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 4 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 503574.2 ymin: 155850.8 xmax: 561956.7 ymax: 200933.6
+Projected CRS: OSGB36 / British National Grid
+     cluster_type   n                       geometry
+1       High-High 119 MULTIPOLYGON (((512230.9 17...
+2        High-Low  25 MULTIPOLYGON (((508914.8 17...
+3         Low-Low   2 MULTIPOLYGON (((521062.4 18...
+4 No Significance 856 MULTIPOLYGON (((517992.6 16...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(Ward_Ethnicity_London, cluster_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 4 features and 2 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 503575 ymin: 155850.8 xmax: 561956.7 ymax: 200933.6
+Projected CRS: OSGB36 / British National Grid
+     cluster_type   n                       geometry
+1       High-High  80 MULTIPOLYGON (((509493.2 17...
+2        High-Low  13 MULTIPOLYGON (((511916.8 17...
+3         Low-Low   7 MULTIPOLYGON (((532685.5 17...
+4 No Significance 579 MULTIPOLYGON (((518494.4 16...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create colour palette</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#ff2800"</span>, <span class="st">"#ff9480"</span>, <span class="st">"#133a7c"</span>, <span class="st">"#ffffff"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The clusters have been identified and now LISA maps for each set of data zones can be created using the data above. First a <strong>map for OAs will be produced.</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create OA LISA map</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(OA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"cluster_type"</span>,</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> pal,</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">title =</span> <span class="st">"Cluster Type"</span>) <span class="sc">+</span></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>, </span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA map of Asian:Indian ethnicity in London by OA"</span>,</span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This LISA map shows that there are <strong>2 large high-high clusters of Asian:Indian people in London</strong>. T<em>he first being across all of Harrow, North Brent (Wembley) and East Hillingdon; the second being across South Hillingdon, West Ealing (Southall) and Central Hounslow.</em> There are also significantly large high-high clusters in Redbridge, North Newham (Ilford), Central Havering, and Croydon. This map also identifies <strong>low-low clusters in areas of North London</strong>, <em>such as Enfield and Haringey, and South London, in Richmond, Bromley, and Wandsworth</em>. There are some <strong>high-low clusters</strong> identified in some areas on the edges of the main high-high clusters, but nothing notable. The very <strong>detailed nature of this map</strong>, showing many different types of clusters across London is a <strong>result of using smaller OA data zones</strong>, <strong>capturing the intricacies</strong> of smaller neighbourhoods across London.</p>
+<p>Now the <strong>LSOA LISA map</strong> can be created.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create LSOA LISA map</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(LSOA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"cluster_type"</span>,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> pal,</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">title =</span> <span class="st">"Cluster Type"</span>) <span class="sc">+</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>, </span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA map of Asian:Indian ethnicity in London by LSOA"</span>,</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb70-20"><a href="#cb70-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb70-21"><a href="#cb70-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb70-22"><a href="#cb70-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb70-23"><a href="#cb70-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb70-24"><a href="#cb70-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>While the main high-high cluster areas are still clearly visible on the map, the larger size of LSOAs has meant that <strong>many low-low clusters</strong>, such as those identified above, are <strong>not classed as significant and are not mapped</strong>. This is as a <strong>result of the scale effect</strong>, where data variations across the different OAs have been <strong>smoothed</strong> upon the creation of LSOAs. However, the trends visible in this map are still suitable for analysis, as the clusters removed were small, and the main trends still remain, but when analysing this map, it should be <strong>noted that this is not the most accurate depiction of the clusters.</strong></p>
+<p>Now the <strong>MSOA LISA map</strong> can be created.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create MSOA LISA map</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(MSOA_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"cluster_type"</span>,</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> pal,</span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">title =</span> <span class="st">"Cluster Type"</span>) <span class="sc">+</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>, </span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA map of Asian:Indian ethnicity in London by MSOA"</span>,</span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb71-25"><a href="#cb71-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This map has <strong>generalised</strong> the data even more. The first thing to note is that the <strong>Harrow/Brent cluster has now been combined with the Hounslow/Hillingdon/Ealing cluster</strong>, providing a <strong>misleading depiction</strong> that Asian:Indians are clustered in this very large connected region. Additionally the <strong>same merge has occurred in East London</strong> between the two large clusters. Another thing to note is that the <strong>clusters in Croydon have disappeared in this map</strong>, which is <strong>misleading</strong> in the analysis, as there are clusters of Asian:Indians in that region (as shown in previous maps), but the trends have been generalised and smoothed here. <strong>Further to this, all the small low-low clusters in South London have been removed</strong> leaving only two rather uninformative clusters at the edge of Hillingdon, and in Brent (Harlesden).</p>
+<p>Finally, a <strong>LISA map for the Ward level data</strong> can be produced.</p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Create Ward LISA map</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(Ward_Ethnicity_London) <span class="sc">+</span></span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_fill</span>(<span class="at">col =</span> <span class="st">"cluster_type"</span>,</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">palette =</span> pal,</span>
+<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">title =</span> <span class="st">"Cluster Type"</span>) <span class="sc">+</span></span>
+<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="fl">0.1</span>, </span>
+<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(London_Boroughs) <span class="sc">+</span></span>
+<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_borders</span>(<span class="at">lwd=</span><span class="dv">2</span>, </span>
+<span id="cb72-11"><a href="#cb72-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">col =</span> <span class="st">'black'</span>, </span>
+<span id="cb72-12"><a href="#cb72-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb72-13"><a href="#cb72-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_layout</span>(<span class="at">main.title =</span> <span class="st">"LISA map of Asian:Indian ethnicity in London by Ward"</span>,</span>
+<span id="cb72-14"><a href="#cb72-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">main.title.fontface =</span> <span class="dv">2</span>,</span>
+<span id="cb72-15"><a href="#cb72-15" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb72-16"><a href="#cb72-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">frame =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb72-17"><a href="#cb72-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.outside.position =</span> <span class="st">"right"</span>,</span>
+<span id="cb72-18"><a href="#cb72-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.size =</span> <span class="dv">1</span>,</span>
+<span id="cb72-19"><a href="#cb72-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">legend.title.fontface =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb72-20"><a href="#cb72-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_compass</span>(<span class="at">type =</span> <span class="st">"arrow"</span>,</span>
+<span id="cb72-21"><a href="#cb72-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"right"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb72-22"><a href="#cb72-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_scale_bar</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>),</span>
+<span id="cb72-23"><a href="#cb72-23" aria-hidden="true" tabindex="-1"></a>               <span class="at">position =</span> <span class="fu">c</span>(<span class="st">"left"</span>, <span class="st">"bottom"</span>)) <span class="sc">+</span></span>
+<span id="cb72-24"><a href="#cb72-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_credits</span>(<span class="st">'Data source: ONS, NOMIS'</span>,</span>
+<span id="cb72-25"><a href="#cb72-25" aria-hidden="true" tabindex="-1"></a>             <span class="at">fontface =</span> <span class="st">'italic'</span>,</span>
+<span id="cb72-26"><a href="#cb72-26" aria-hidden="true" tabindex="-1"></a>             <span class="at">align =</span> <span class="st">'right'</span>,</span>
+<span id="cb72-27"><a href="#cb72-27" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="maup_illustrated_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>With similar a <em>similar number of data zones as the MSOA map</em>, this ward LISA map is a good indication of how the <strong>zoning effect</strong> of the MAUP can affect calculations. The first thing to note is that <strong>more low-low clusters have reappeared</strong> across many of the boroughs as a result of the re-zoning. Additionally, the high-high clusters in East London have been split by high-low clusters in this map, but overall this map has <strong>similar trends to the MSOA map</strong>, due to the sizes of the zones being the same.</p>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<p>The choropleth and LISA maps both provide a <strong>clear illustration of how significant and important the MAUP is in mapping</strong>. While this example is across a smaller set of data being used for illustrative purposes, <strong>many larger studies must account for the MAUP in their methods and their findings, otherwise they are open to criticism and errors from the scale and zoning effects</strong>. The <strong>first set of maps</strong> produced show how the same data can be presented very differently due to the different spatial levels of data aggregation occurring. The <strong>second set of maps</strong> show how these different geographic levels of analysis can impact statistical tests on data which are commonly used in many studies relying on geographic data. While the differences between OAs and LSOAs, or MSOAs and Wards are not extreme, the <strong>major issues occur when different studies use OAs and MSOAs to present the same data, or the same study does not keep the geography level consistent throughout the report.</strong> This report has shown the <strong>effects of scale and zoning</strong> (MSOA vs Ward) <strong>on data</strong>. Overall, this report shows the <strong>extreme significance of the MAUP in GIS,</strong> and how it is <strong>critical to account for and mitigate these impacts.</strong></p>
+<p>There are ways to <strong>mitigate</strong> the impacts of the MAUP, such as <strong>keeping the geography level consistent</strong> throughout a study, comparing <strong>what levels are used in previous studies</strong>, and <strong>stating why a specific geography unit level is chosen</strong> for the study. My favourite mitigation strategy is to <strong>create equally sized zones across a study area to aggregate data into</strong>. Creating a <strong>hexagon or square grid</strong> across the study area and counting points, as outlined by Wong, 2021 here: <a href="https://urbandatapalette.com/post/2021-08-tessellation-sf/" class="uri">https://urbandatapalette.com/post/2021-08-tessellation-sf/</a> is a <strong>very good method of standardising the geography</strong> of the study area and to significantly <strong>reduce the impacts of the scale and zoning effects</strong> on the study. Unfortunately as <strong>all 2021 England Census data is pre-aggregated</strong> and can only be downloaded by specific unit area (e.g.&nbsp;LSOA/Ward), it is not possible to do this in this report. However <strong>this method works with point data</strong>, such as British Police Crime Data, and if you would like to view this method in action, <strong>check out my GIS study of weapon possession crimes in West Midlands County (2023) here:</strong> <a href="https://vmistri91.github.io/Portfolio/social_atlas_weapons.html" class="uri">https://vmistri91.github.io/Portfolio/social_atlas_weapons.html</a>, where most geospatial analysis in this study is conducted <strong>using a hexagonal grid to count crimes.</strong></p>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+<p>Anselin, L. (1995) ‘Local Indicators of Spatial Association—LISA’, <em>Geographical Analysis</em>, 27, 2, 93-115, <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x" class="uri">https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1538-4632.1995.tb00338.x</a>.</p>
+<p>Bernard, C. (2019) <em>Immersing evolving geographic divisions in the semantic web</em>, Grenoble: Universite Grenoble Alpes, <a href="https://www.researchgate.net/publication/340376528_Immersing_evolving_geographic_divisions_in_the_semantic_Web" class="uri">https://www.researchgate.net/publication/340376528_Immersing_evolving_geographic_divisions_in_the_semantic_Web</a>.</p>
+<p>Fotheringham, A.S. and D.W.S Wong (1991) ‘The modifiable areal unit problem in multivariate statistical analysis’, <em>Environment and Planning A</em>, 23, 1, 1025-1044, <a href="https://journals.sagepub.com/doi/10.1068/a231025" class="uri">https://journals.sagepub.com/doi/10.1068/a231025</a>.</p>
+<p>Gimond, M. (2023) <em>Intro to GIS and spatial analysis</em>, ‘Chapter 13: Spatial autocorrelation’, <a href="https://mgimond.github.io/Spatial/spatial-autocorrelation.html" class="uri">https://mgimond.github.io/Spatial/spatial-autocorrelation.html</a>.</p>
+<p>Lee, S. (2019) ‘Uncertainty in the effects of the modifiable areal unit problem under different levels of spatial autocorrelation: a simulation study’, <em>International Journal of Geographical Information Science</em>, 33, 1, 1135-1154, <a href="https://www.tandfonline.com/doi/full/10.1080/13658816.2018.1542699" class="uri">https://www.tandfonline.com/doi/full/10.1080/13658816.2018.1542699</a>.</p>
+<p>Livings, M. and A.M. Wu (2020) ‘Local Measures of Spatial Association’ <em>The Geographic Information Science &amp; Technology Body of Knowledge (3rd Quarter 2020 Edition)</em>, John P. Wilson (Ed.), <a href="https://gistbok-topics.ucgis.org/AM-03-023" class="uri">https://gistbok-topics.ucgis.org/AM-03-023</a>.</p>
+<p>Lovelace, R., Nowosad, J. and Muenchow, J. (2021) ‘Chapter 4: Spatial data operations’, <em>Geocomputation with R</em>, <a href="https://bookdown.org/robinlovelace/geocompr/spatial-operations.html" class="uri">https://bookdown.org/robinlovelace/geocompr/spatial-operations.html</a>.</p>
+<p>Oliveira, G.L.A., L. Lima, I. Silva, M.C. Riberio-Dantas, K.H. Monterio and P.T. Endo (2021) ‘Evaluating Social Distancing Measures and Their Association with the Covid-19 Pandemic in South America’, <em>International Journal of Geo-Information</em>, 10, 121, 1-35, <a href="https://www.researchgate.net/publication/349718331_Evaluating_Social_Distancing_Measures_and_Their_Association_with_the_Covid-19_Pandemic_in_South_America" class="uri">https://www.researchgate.net/publication/349718331_Evaluating_Social_Distancing_Measures_and_Their_Association_with_the_Covid-19_Pandemic_in_South_America</a>.</p>
+<p>Wong, D. (2009) ‘Modifiable Areal Unit Problem’, <em>International Encyclopedia of Human Geography</em>, 169-174, <a href="https://www.sciencedirect.com/science/article/abs/pii/B9780080449104004752" class="uri">https://www.sciencedirect.com/science/article/abs/pii/B9780080449104004752</a>.</p>
+<p>Wong, K. (2021) ‘Create spatial square/hexagon grids and count points inside in R with sf’, Hong Kong: Urban Data Palette, <a href="https://urbandatapalette.com/post/2021-08-tessellation-sf/" class="uri">https://urbandatapalette.com/post/2021-08-tessellation-sf/</a>.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
